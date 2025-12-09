@@ -1,7 +1,12 @@
-function App() {
+import { Post } from './Post'
+
+export function App() {
   return (
-      <h1>Hello World!</h1>
+    <div>
+      <Post 
+        author="Lucas Gabriel" 
+        content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus magnam harum nostrum asperiores enim quis corrupti repudiandae praesentium. Accusamus porro harum eligendi in mollitia voluptate asperiores dolores nam expedita laboriosam!"
+      />
+    </div>
   )
 }
-
-export default App
