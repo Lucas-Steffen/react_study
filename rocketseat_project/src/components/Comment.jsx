@@ -2,7 +2,7 @@ import { ThumbsUp, Trash } from 'phosphor-react'
 import { Avatar } from './Avatar'
 import styles from './Comment.module.css'
 
-export function Comment(){
+export function Comment({ content}){
     return(
         <div className={styles.comment}>
             <Avatar hasBorder={false} src="https://github.com/lucascostabueno.png" />
@@ -20,7 +20,7 @@ export function Comment(){
                         </button>
                     </header>
 
-                    <p>O homem simplesmente decidiu encostar no frontend e já está evoluindo como se fosse rotina. Lucas Gabriel é assim: pega a stack, destrincha, aprende e entrega. É isso aí, backender, mostrando que quando resolve estudar algo novo, o nível sobe rápido.</p>
+                    <p>{content}</p>
                 </div>
 
                 <footer>
