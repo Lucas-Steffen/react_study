@@ -20,6 +20,7 @@ export function Post({ author, publishedAt, content}){
     const publishedDateFormatted = format(publishedAt, "dd 'de' LLLL 'de' yyyy 'às' HH:mm'h'", {
         locale: ptBR
     })
+
     const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
         locale: ptBR,
         addSuffix: true
@@ -27,13 +28,31 @@ export function Post({ author, publishedAt, content}){
 
     function handleCreateNewComment(){
         event.preventDefault();
+        // Imutabilidade
         setComments([...comments, newCommentText])
         setNewCommentText('')
     }
 
     function handleCreateNewCommentChange(){
+        event.target.setCustomValidity('');
         setNewCommentText(event.target.value)
     }
+
+    function handleNewCommentInvalid(){
+        event.target.setCustomValidity('Esse campo é obrigatório!');
+    }
+
+    function deleteComment(commentToDelete){
+        // Imutabilidade -> as variáveis não sofrem mutação! Nós nunca alteramos uma variável na memória.
+        // nós criamos um novo valor (um novo espaço na memória).
+
+        const commentsWithoutDeletedOne = comments.filter(comment => { // <- Percorre a lista e retorna o que for diferente
+            return comment != commentToDelete;
+        })
+        setComments(commentsWithoutDeletedOne);
+    }
+
+    const isNewCommentInputEmpty = newCommentText.length == 0
 
     return(
         <article className={styles.post}>
@@ -54,9 +73,9 @@ export function Post({ author, publishedAt, content}){
             <div className={styles.content}>
                 {content.map(line => {
                     if(line.type == 'paragraph'){
-                        return <p>{line.content}</p>
+                        return <p key={line.content}>{line.content}</p>
                     } else if(line.type == 'link'){
-                        return <p><a href="">{line.content}</a></p>
+                        return <p key={line.content}><a href="">{line.content}</a></p>
                     }
                 })}
             </div>
@@ -68,16 +87,29 @@ export function Post({ author, publishedAt, content}){
                 <textarea name='comment' 
                           placeholder='Escreva um comentário...' 
                           value={newCommentText}
-                          onChange={handleCreateNewCommentChange}/>
+                          onChange={handleCreateNewCommentChange}
+                          onInvalid={handleNewCommentInvalid}
+                          required
+                />
 
                 <footer>
-                    <button type="submit">Publicar</button>
+                    <button 
+                        type="submit"
+                        disabled={isNewCommentInputEmpty}>
+                            Publicar
+                    </button>
                 </footer>
             </form>
 
             <div className={styles.commentList}>
                 {comments.map(comment =>{
-                    return <Comment content={comment}/>
+                    return (
+                        <Comment 
+                            key={comment} 
+                            content={comment} 
+                            onDeleteComment={deleteComment}
+                        />
+                    )
                 })}
             </div>
         </article>
