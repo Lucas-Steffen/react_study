@@ -6,8 +6,16 @@ import { CountdownContainer,
          Separator, 
          StartCountdownButton, 
          TaskInput } from "./styles";
+import { useState } from "react";
 
 export function Home(){
+    const [task, setTask] = useState('');
+    const [minutesAmount, setMinutesAmount] = useState(0);
+
+    function handleSubmit(event){
+        
+    }
+
     return(
         <HomeContainer>
             <form action="">
@@ -15,6 +23,7 @@ export function Home(){
                     <label htmlFor="task">Vou trabalhar em</label>
                     <TaskInput 
                         id="task" 
+                        name="task"
                         placeholder="Dê um nome para o seu projeto"
                         list="task-suggestions"
                     />
@@ -47,7 +56,9 @@ export function Home(){
                     <span>0</span>
                 </CountdownContainer>
 
-                <StartCountdownButton type="submit">
+                <StartCountdownButton 
+                    disabled={!task} 
+                    type="submit">
                     <Play size={24}/>
                     Começar
                 </StartCountdownButton>
